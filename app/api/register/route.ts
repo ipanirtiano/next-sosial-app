@@ -29,8 +29,7 @@ export const POST = async (request: Request) => {
         facebook: "null",
         twitter: "null",
         profile_pic: "profile.png",
-        cover_pic:
-          "https://images.pexels.com/photos/3228727/pexels-photo-3228727.jpeg?auto=compress&cs=tinysrgb&w=1600",
+        cover_pic: "cover.jpg",
         password: hashPassword,
       },
     });
