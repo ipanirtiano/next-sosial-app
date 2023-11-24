@@ -1,30 +1,29 @@
+"use client";
 import { post } from "@prisma/client";
 import LayoutsHome from "../components/LayoutHome";
 import Post from "../components/Post";
 import Share from "../components/Share";
 import Stories from "../components/Stories";
-import prisma from "@/prisma/prisma_db";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const getAllPost = async () => {
-  try {
-    const response = await prisma.post.findMany({
-      include: {
-        User: true,
-        comment: {
-          include: { User: true },
-        },
-        like: true,
-      },
-      orderBy: { id: "desc" },
-    });
-    return response;
-  } catch (error) {
-    console.log(error);
-  }
-};
+const Page = () => {
+  // state data post
+  const [dataPost, setDataPost] = useState([]);
 
-const Page = async () => {
-  const dataPost = await getAllPost();
+  const getAllPostById = async () => {
+    try {
+      const response = await axios.get("/api/post/me");
+      setDataPost(response.data.data);
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAllPostById();
+  }, [dataPost]);
 
   return (
     <LayoutsHome>
