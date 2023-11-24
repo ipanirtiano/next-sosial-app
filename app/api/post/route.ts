@@ -9,7 +9,13 @@ export const GET = async (request: Request) => {
   try {
     // get all post
     const response = await prisma.post.findMany({
-      include: { User: true, comment: true, like: true },
+      include: {
+        User: true,
+        comment: {
+          include: { User: true },
+        },
+        like: true,
+      },
       orderBy: { id: "desc" },
     });
     // return
