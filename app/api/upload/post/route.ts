@@ -22,7 +22,7 @@ export const POST = async (request: Request) => {
   const buffer = Buffer.from(byteData);
 
   // set path
-  const path = `./public/upload/${newFileName}`;
+  const path = `https://next-sosial-app.vercel.app/public/upload/${newFileName}`;
   // write file to the path
   await writeFile(path, buffer);
 
