@@ -61,7 +61,7 @@ const FormComment = ({ idPost }: { idPost: string }) => {
             {addCommentLoading ? (
               <div className="flex items-center gap-2">
                 <span className="loading loading-spinner loading-xs text-xs"></span>
-                Loading...
+                Send
               </div>
             ) : (
               "Send"
