@@ -45,16 +45,18 @@ const Share = () => {
 
   // function upload image
   const uploadFile = async () => {
-    // set form data
-    const formData = new FormData();
-    formData.set("file", image);
+    if (image) {
+      // set form data
+      const formData = new FormData();
+      formData.set("file", image);
 
-    try {
-      const response = await axios.post("/api/upload/post", formData);
+      try {
+        const response = await axios.post("/api/upload/post", formData);
 
-      return response.data.fileName;
-    } catch (error) {
-      console.log(error);
+        return response.data.fileName;
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 

@@ -51,28 +51,32 @@ const Settings = () => {
   // function upload profile pic
   const uploadProfile = async () => {
     // set form data
-    const formData = new FormData();
-    formData.set("profile", profile);
+    if (profile) {
+      const formData = new FormData();
+      formData.set("profile", profile);
 
-    try {
-      const response = await axios.post("/api/upload/profile", formData);
-      return response.data.fileName;
-    } catch (error) {
-      console.log(error);
+      try {
+        const response = await axios.post("/api/upload/profile", formData);
+        return response.data.fileName;
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
   // function upload cover pic
   const uploadCover = async () => {
     // set form data
-    const formData = new FormData();
-    formData.set("cover", cover);
+    if (cover) {
+      const formData = new FormData();
+      formData.set("cover", cover);
 
-    try {
-      const response = await axios.post("/api/upload/cover", formData);
-      return response.data.fileName;
-    } catch (error) {
-      console.log(error);
+      try {
+        const response = await axios.post("/api/upload/cover", formData);
+        return response.data.fileName;
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
