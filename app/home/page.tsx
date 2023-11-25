@@ -29,6 +29,7 @@ const Page = () => {
     <LayoutsHome>
       <Stories />
       <Share />
+
       {dataPost?.map((item: post, i: any) => {
         return <Post key={i} item={item} />;
       })}

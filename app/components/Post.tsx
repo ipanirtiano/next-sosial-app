@@ -101,7 +101,7 @@ const Post = ({ item }: { item: any }) => {
       <div className="mt-4">
         <p className="text-sm mb-2">{item?.description_post}</p>
         {item?.image_post && (
-          <img src={`/upload/${item?.image_post}`} alt="" className="w-full" />
+          <img src={item?.image_post} alt="" className="w-full" />
         )}
       </div>
       <div className="flex items-center gap-4 pt-5">
