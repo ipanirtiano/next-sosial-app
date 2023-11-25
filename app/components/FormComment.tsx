@@ -43,7 +43,7 @@ const FormComment = ({ idPost }: { idPost: string }) => {
     <div className="w-full flex gap-3 mt-4 border-b pt-2 pb-3 items-center">
       <div className="w-10">
         <img
-          src={`/profile_img/${authMe?.profile_pic}`}
+          src={authMe?.profile_pic}
           alt=""
           className="rounded-full w-8 h-8 object-cover bg-gray-200"
         />

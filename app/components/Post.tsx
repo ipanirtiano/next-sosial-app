@@ -65,7 +65,7 @@ const Post = ({ item }: { item: any }) => {
         <div className="flex items-center gap-3">
           <div className="cursor-pointer">
             <img
-              src={`/profile_img/${item?.User?.profile_pic}`}
+              src={item?.User?.profile_pic}
               alt=""
               className="rounded-full w-8 h-8 object-cover bg-gray-200"
             />

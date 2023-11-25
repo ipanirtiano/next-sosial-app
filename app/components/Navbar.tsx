@@ -77,7 +77,7 @@ const Navbar = ({ user }: { user: user }) => {
           className="cursor-pointer relative"
         >
           <img
-            src={`profile_img/${user?.profile_pic}`}
+            src={user?.profile_pic}
             className="w-8 h-8 object-cover rounded-full bg-gray-200"
             alt=""
           />
@@ -93,7 +93,7 @@ const Navbar = ({ user }: { user: user }) => {
                 className="flex gap-3 items-center cursor-pointer"
               >
                 <img
-                  src={`profile_img/${user?.profile_pic}`}
+                  src={user?.profile_pic}
                   className="w-8 h-8 object-cover rounded-full bg-gray-200"
                   alt=""
                 />

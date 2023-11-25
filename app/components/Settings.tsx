@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import React, { useState, SyntheticEvent } from "react";
+import React, { useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import NotifyMe from "./NotifyMe";
+import { useForm } from "react-hook-form";
 
 const Settings = () => {
   // init use router
@@ -24,6 +25,8 @@ const Settings = () => {
   const [cover, setCover] = useState<File>();
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(false);
+  // state useform
+  const { register, handleSubmit } = useForm();
 
   // state modal box
   const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -48,67 +51,43 @@ const Settings = () => {
     },
   });
 
-  // function upload profile pic
-  const uploadProfile = async () => {
-    // set form data
+  // function onsubmit update profile user and cover pic
+  const onSubmit = async (data: any) => {
+    let profile_pic =
+      "https://res.cloudinary.com/dqxwj5jsh/image/upload/v1700921652/profile/ngxjdezfzlkugmcymo8g.png";
+    let cover_pic =
+      "https://res.cloudinary.com/dqxwj5jsh/image/upload/v1700922269/cover/cgbfwydeon88sq149xpc.jpg";
+
+    // if there has profile pic to update
     if (profile) {
       const formData = new FormData();
-      formData.set("profile", profile);
-
-      try {
-        const response = await axios.post("/api/upload/profile", formData);
-        return response.data.fileName;
-      } catch (error) {
-        console.log(error);
-      }
+      formData.append("file", profile);
+      formData.append("upload_preset", "uploads");
+      const uploadResponse = await fetch(
+        "https://api.cloudinary.com/v1_1/dqxwj5jsh/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const uploadedImageData = await uploadResponse.json();
+      profile_pic = uploadedImageData.secure_url;
     }
-  };
 
-  // function upload cover pic
-  const uploadCover = async () => {
-    // set form data
+    // if there has cover pic to update
     if (cover) {
       const formData = new FormData();
-      formData.set("cover", cover);
-
-      try {
-        const response = await axios.post("/api/upload/cover", formData);
-        return response.data.fileName;
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
-  // function handle submit
-  const handleSubmit = async (e: SyntheticEvent) => {
-    e.preventDefault();
-    // validate the form
-    if (
-      full_name === "" ||
-      email === "" ||
-      phone === "" ||
-      instagram === "" ||
-      facebook === "" ||
-      twitter === ""
-    )
-      return;
-
-    // validate profile
-    // set file name
-    let profile_pic: any = "";
-    if (profile) {
-      profile_pic = await uploadProfile();
-    } else {
-      profile_pic = authMe?.profile_pic;
-    }
-
-    // validate cover pic
-    let cover_pic: any = "";
-    if (cover) {
-      cover_pic = await uploadCover();
-    } else {
-      cover_pic = authMe?.cover_poc;
+      formData.append("file", cover);
+      formData.append("upload_preset", "uploads");
+      const uploadResponse = await fetch(
+        "https://api.cloudinary.com/v1_1/dqxwj5jsh/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const uploadedImageData = await uploadResponse.json();
+      profile_pic = uploadedImageData.secure_url;
     }
 
     const user = {
@@ -124,6 +103,7 @@ const Settings = () => {
 
     // run mutation update user
     updateUser(user);
+    router.refresh();
   };
 
   // handle click callback
@@ -135,7 +115,7 @@ const Settings = () => {
     <div className="w-full bg-white mb-3 py-3 px-6">
       <p className="font-semibold text-xl mb-4">Update Profile</p>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex items-center gap-3">
           <div className="w-[100px] h-[100px] relative">
             {profile ? (
@@ -146,13 +126,14 @@ const Settings = () => {
               />
             ) : (
               <img
-                src={`profile_img/${authMe?.profile_pic}`}
+                src={authMe?.profile_pic}
                 className="w-full h-full object-cover"
                 alt=""
               />
             )}
 
             <input
+              {...register("profile")}
               type="file"
               id="fileProfile"
               className=" text-sm text-slate-500  hidden"
@@ -177,7 +158,7 @@ const Settings = () => {
               />
             ) : (
               <img
-                src={`cover_img/${authMe?.cover_pic}`}
+                src={authMe?.cover_pic}
                 className="w-full h-full object-cover"
                 alt=""
               />

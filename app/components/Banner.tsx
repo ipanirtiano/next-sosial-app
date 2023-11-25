@@ -10,13 +10,13 @@ const Banner = () => {
   return (
     <div className="w-full h-[200px] bg-white relative border border-gray-200">
       <img
-        src={`/cover_img/${authMe?.cover_pic}`}
+        src={authMe?.cover_pic}
         alt=""
         className="w-full h-full object-cover"
       />
 
       <img
-        src={`/profile_img/${authMe?.profile_pic}`}
+        src={authMe?.profile_pic}
         alt=""
         className="w-[130px] h-[130px] bg-gray-100 rounded-full absolute bottom-[-60px] left-[50%] translate-x-[-50%] border-[3px] border-white shadow-lg object-cover"
       />

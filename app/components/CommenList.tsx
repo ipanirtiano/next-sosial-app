@@ -7,7 +7,7 @@ const CommenList = ({ item }: { item: any }) => {
     <div className="w-full flex gap-3 mt-2 pt-2 items-start">
       <div className="w-10 mt-1">
         <img
-          src={`/profile_img/${item?.User.profile_pic}`}
+          src={item?.User.profile_pic}
           alt=""
           className="rounded-full w-8 h-8 object-cover bg-gray-200"
         />

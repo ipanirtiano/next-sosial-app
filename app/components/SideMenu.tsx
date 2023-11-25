@@ -12,15 +12,8 @@ const SideMenu = ({ user }: { user: user }) => {
             href="/profile"
             className="flex gap-3 items-center cursor-pointer"
           >
-            {/* <Image
-              src={`/profile_img/${user?.profile_pic}`}
-              width={24}
-              height={24}
-              alt="me"
-              className="bg-gray-200 rounded-full object-cover"
-            ></Image> */}
             <img
-              src={`profile_img/${user?.profile_pic}`}
+              src={user?.profile_pic}
               className="w-[23px] h-[23px] object-cover rounded-full bg-gray-200"
               alt=""
             />

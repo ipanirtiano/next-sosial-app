@@ -3,7 +3,7 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
-import { useState, SyntheticEvent } from "react";
+import { useState } from "react";
 import { BsFillSendFill } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 import NotifyMe from "./NotifyMe";
@@ -84,7 +84,7 @@ const Share = () => {
           <div className="flex items-start gap-3 mb-4 w-[100%]">
             <div className="cursor-pointer w-[55px]">
               <img
-                src={`/profile_img/${authMe?.profile_pic}`}
+                src={authMe?.profile_pic}
                 alt=""
                 className="rounded-full w-8 h-8 object-cover bg-gray-200"
               />

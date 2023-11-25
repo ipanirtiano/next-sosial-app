@@ -28,8 +28,10 @@ export const POST = async (request: Request) => {
         instagram: "null",
         facebook: "null",
         twitter: "null",
-        profile_pic: "profile.png",
-        cover_pic: "cover.jpg",
+        profile_pic:
+          "https://res.cloudinary.com/dqxwj5jsh/image/upload/v1700921652/profile/ngxjdezfzlkugmcymo8g.png",
+        cover_pic:
+          "https://res.cloudinary.com/dqxwj5jsh/image/upload/v1700922269/cover/cgbfwydeon88sq149xpc.jpg",
         password: hashPassword,
       },
     });
