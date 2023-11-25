@@ -27,12 +27,14 @@ const Settings = () => {
   const [status, setStatus] = useState(false);
   // state useform
   const { register, handleSubmit } = useForm();
+  // state loading
+  const [isLoading, setIsLoading] = useState(false);
 
   // state modal box
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   // mutation update user
-  const { mutate: updateUser, isPending: updateUserLoading } = useMutation({
+  const { mutate: updateUser } = useMutation({
     mutationFn: async (newUser: any) => {
       const response = await axios.patch("/api/user/update", newUser);
       return response.data;
@@ -53,57 +55,62 @@ const Settings = () => {
 
   // function onsubmit update profile user and cover pic
   const onSubmit = async (data: any) => {
-    let profile_pic =
-      "https://res.cloudinary.com/dqxwj5jsh/image/upload/v1700921652/profile/ngxjdezfzlkugmcymo8g.png";
-    let cover_pic =
-      "https://res.cloudinary.com/dqxwj5jsh/image/upload/v1700922269/cover/cgbfwydeon88sq149xpc.jpg";
+    // set loading is true
+    setIsLoading(true);
+    try {
+      let profile_pic = authMe?.profile_pic;
+      let cover_pic = authMe?.cover_pic;
 
-    // if there has profile pic to update
-    if (profile) {
-      const formData = new FormData();
-      formData.append("file", profile);
-      formData.append("upload_preset", "uploads");
-      const uploadResponse = await fetch(
-        "https://api.cloudinary.com/v1_1/dqxwj5jsh/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      const uploadedImageData = await uploadResponse.json();
-      profile_pic = uploadedImageData.secure_url;
+      // if there has profile pic to update
+      if (profile) {
+        const formData = new FormData();
+        formData.append("file", profile);
+        formData.append("upload_preset", "uploads");
+        const uploadResponse = await fetch(
+          "https://api.cloudinary.com/v1_1/dqxwj5jsh/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const uploadedImageData = await uploadResponse.json();
+        profile_pic = uploadedImageData.secure_url;
+      }
+
+      // if there has cover pic to update
+      if (cover) {
+        const formData = new FormData();
+        formData.append("file", cover);
+        formData.append("upload_preset", "uploads");
+        const uploadResponse = await fetch(
+          "https://api.cloudinary.com/v1_1/dqxwj5jsh/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const uploadedImageData = await uploadResponse.json();
+        cover_pic = uploadedImageData.secure_url;
+      }
+
+      const user = {
+        full_name,
+        email,
+        phone,
+        instagram,
+        facebook,
+        twitter,
+        profile_pic,
+        cover_pic,
+      };
+
+      // run mutation update user
+      updateUser(user);
+      router.refresh();
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
     }
-
-    // if there has cover pic to update
-    if (cover) {
-      const formData = new FormData();
-      formData.append("file", cover);
-      formData.append("upload_preset", "uploads");
-      const uploadResponse = await fetch(
-        "https://api.cloudinary.com/v1_1/dqxwj5jsh/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      const uploadedImageData = await uploadResponse.json();
-      cover_pic = uploadedImageData.secure_url;
-    }
-
-    const user = {
-      full_name,
-      email,
-      phone,
-      instagram,
-      facebook,
-      twitter,
-      profile_pic,
-      cover_pic,
-    };
-
-    // run mutation update user
-    updateUser(user);
-    router.refresh();
   };
 
   // handle click callback
@@ -256,7 +263,7 @@ const Settings = () => {
           type="submit"
           className="w-full flex items-center justify-center bg-blue-600 text-white py-3 text-center text-sm cursor-pointer"
         >
-          {updateUserLoading ? (
+          {isLoading ? (
             <div className="flex items-center gap-2">
               <span className="loading loading-spinner loading-sm"></span>
               Updateting...

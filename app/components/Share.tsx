@@ -18,6 +18,8 @@ const Share = () => {
   const [description_post, setDescriptionPost] = useState("");
   const [messageError, setMessageError] = useState("");
   const [status, setStatus] = useState(false);
+  // state loading
+  const [isLoading, setIsloading] = useState(false);
   // state useform
   const { register, handleSubmit } = useForm();
 
@@ -25,7 +27,7 @@ const Share = () => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   // mutations create a new post
-  const { mutate: createPost, isPending: createPostLoading } = useMutation({
+  const { mutate: createPost } = useMutation({
     mutationFn: async (newPost: any) => {
       const response = await axios.post("/api/post", newPost);
       return response.data.data;
@@ -52,29 +54,36 @@ const Share = () => {
 
   // function onSubmit handle post and upload file
   const onSubmit = async (data: any) => {
-    let imageUrl = "";
-    if (image) {
-      const formData = new FormData();
-      formData.append("file", image);
-      formData.append("upload_preset", "uploads");
-      const uploadResponse = await fetch(
-        "https://api.cloudinary.com/v1_1/dqxwj5jsh/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      const uploadedImageData = await uploadResponse.json();
-      imageUrl = uploadedImageData.secure_url;
-    }
+    // set is loading true
+    setIsloading(true);
+    try {
+      let imageUrl = "";
+      if (image) {
+        const formData = new FormData();
+        formData.append("file", image);
+        formData.append("upload_preset", "uploads");
+        const uploadResponse = await fetch(
+          "https://api.cloudinary.com/v1_1/dqxwj5jsh/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const uploadedImageData = await uploadResponse.json();
+        imageUrl = uploadedImageData.secure_url;
+      }
 
-    // run mutations
-    const dataPost = {
-      description_post: description_post,
-      image_post: imageUrl,
-    };
-    createPost(dataPost);
-    router.refresh();
+      // run mutations
+      const dataPost = {
+        description_post: description_post,
+        image_post: imageUrl,
+      };
+      createPost(dataPost);
+      router.refresh();
+      setIsloading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -160,7 +169,7 @@ const Share = () => {
               type="submit"
               className="bg-blue-600 text-white px-2 py-1 text-sm cursor-pointer  rounded-sm hover:bg-blue-700"
             >
-              {createPostLoading ? (
+              {isLoading ? (
                 <div className="flex items-center gap-2">
                   <span className="loading loading-spinner loading-sm"></span>
                   Loading...
