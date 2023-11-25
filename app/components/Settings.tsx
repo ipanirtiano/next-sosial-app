@@ -87,7 +87,7 @@ const Settings = () => {
         }
       );
       const uploadedImageData = await uploadResponse.json();
-      profile_pic = uploadedImageData.secure_url;
+      cover_pic = uploadedImageData.secure_url;
     }
 
     const user = {
